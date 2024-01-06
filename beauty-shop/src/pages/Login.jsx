@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 export default function Login() {
   const [formData, setFormData] = useState({});
   const {loading, error} = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -34,7 +35,7 @@ export default function Login() {
         return;
       }
       dispatch(signInSuccess(data));
-      navigate('/main');
+      navigate('/');
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
@@ -42,13 +43,13 @@ export default function Login() {
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Регистрация</h1>
+      <h1 className='text-3xl text-center font-semibold my-7'>Авторизация</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
           type='text'
-          placeholder='username'
+          placeholder='email'
           className='border p-3 rounded-lg'
-          id='username'
+          id='email'
           onChange={handleChange}
         />
         <input
@@ -65,11 +66,12 @@ export default function Login() {
         >
           {loading ? 'Загрузка...' : 'Авторизоваться'}
         </button>
+        <OAuth/>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Ещё нет аккаунта?</p>
         <Link to={'/register'}>
-          <span className='text-blue-700'>Авторизоваться</span>
+          <span className='text-blue-700'>Зарегистрироваться</span>
         </Link>
       </div>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
